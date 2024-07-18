@@ -8,56 +8,24 @@ class BlackJack{
         this.gameHistoryLog = [];
     }
 
-    // overarching card list. I specified number and suite and then it will determine the value based on the name
-    // specified suite so that it is easier to link values in player hand to visual card references in the actual phaser game
-    static allCard = ["aceSpade", 
-        "aceHeart",
-        "aceClub",
-        "aceDiamond",
-        "2Spade",
-        "2Heart",
-        "2Club",
-        "2Diamond",
-        "3Spade",
-        "3Heart",
-        "3Club",
-        "3Diamond",
-        "4Spade",
-        "4Heart",
-        "4Club",
-        "4Diamond",
-        "5Spade",
-        "5Heart",
-        "5Club",
-        "5Diamond",
-        "6Spade",
-        "6Heart",
-        "6Club",
-        "6Diamond",
-        "7Spade",
-        "7Heart",
-        "7Club",
-        "7Diamond",
-        "8Spade",
-        "8Heart",
-        "8Club",
-        "8Diamond",
-        "9Spade",
-        "9Heart",
-        "9Club",
-        "9Diamond",
-        "jackSpade",
-        "jackHeart",
-        "jackClub",
-        "jackDiamond",
-        "queenSpade",
-        "queenHeart",
-        "queenClub",
-        "queenDiamond",
-        "kingSpade",
-        "kingHeart",
-        "kingClub",
-        "kingDiamond"];
+    // List of all 52 playing cards
+    // Each list item is an object with 2 fields, suit and value
+    // The suit field is a string representing the card's suit ("clubs", "diamonds", "hearts", or "spades")
+    // The value field is a number representing the card's pip value (1-13)
+    static allCard = generateCards();
+
+    // Generates list of card objects, including suit and value
+    generateCards() {
+        const cards = [];
+        // Suits written to match card image file format
+        const suits = [ 'clubs', 'diamonds', 'hearts', 'spades' ];
+        suits.forEach(suit => {
+            for (let i = 1; i <= 13; i++)
+                cards.push({ suit, value: i });
+        });
+        return cards;
+    }
+    
     // function for if player hits
     hit(userCards) {
         
@@ -76,11 +44,16 @@ class BlackJack{
 
     // function that makes sure the player or cpu has not busted
     getTotal(userCards){
+        // Make copy of userCards so original array is not affected by sorting
+        const _userCards = [...userCards];
+        // Sort userCards from greates value to lowest so aces are processed last
+        _userCards.sort((card1, card2) => card2.value - card1.value);
+
         // do math to determine that the values in the list do not add up over 21
-        const totalValue = 0;
-        for (let i = 0; i < userCards.length; i++) {
-            totalValue = totalValue + this.getCardValue(userCards[i], userCards);
-        }
+        let totalValue = 0;
+        _userCards.forEach(card => {
+            totalValue += this.getCardValue(card, totalValue);
+        });
         
         if(totalValue>21){
             this.bust();
@@ -89,57 +62,15 @@ class BlackJack{
         return totalValue;
     }
 
-    // might be a better way to do this but I've hard coded it basically
-    getCardValue(card, userCards){
-        var value = 0;
-        //converts card names to numbers aka 4 of spades is now just a 4
-        
-        if(card == "2Heart" || card == "2Spade" || card == "2Diamond" || card == "2Club"){
-            value = 2;
-        }
-
-        if(card == "3Heart" || card == "3Spade" || card == "3Diamond" || card == "3Club"){
-            value = 1;
-        }
-
-        if(card == "4Heart" || card == "4Spade" || card == "4Diamond" || card == "4Club"){
-            value = 1;
-        }
-
-        if(card == "5Heart" || card == "5Spade" || card == "5Diamond" || card == "5Club"){
-            value = 1;
-        }
-
-        if(card == "6Heart" || card == "6Spade" || card == "6Diamond" || card == "6Club"){
-            value = 1;
-        }
-
-        if(card == "7Heart" || card == "7Spade" || card == "7Diamond" || card == "7Club"){
-            value = 1;
-        }
-
-        if(card == "8Heart" || card == "8Spade" || card == "8Diamond" || card == "8Club"){
-            value = 1;
-        }
-
-        if(card == "9Heart" || card == "9Spade" || card == "9Diamond" || card == "9Club"){
-            value = 1;
-        }
-
-        if(card == "jackHeart" || card == "jackSpade" || card == "jackDiamond" || card == "jackClub" || card == "queenHeart" || card == "queenSpade" || card == "queenDiamond" || card == "queenClub" || card == "kingHeart" || card == "kingSpade" || card == "kingDiamond" || card == "kingClub"){
-            value = 10;
-        }
-        //do math for the ace card. Ace card can be 1 or 11 so this needs extra function determining what the value is
-        //if the rest of the hands value is <11, the value is 11
-        //if the rest of the hands value is >=11, the value is 1
-        if (card == "aceHeart" || card == "aceSpade" || card == "aceDiamond" || card == "aceClub"){
-            if(this.getTotal(userCards) >= 11){
-                value = 1;
-            }else{
-                value = 11;
-            }
-        }
-        return value;
+    getCardValue(card, totalValue){
+        // Aces can be worth either 1 or 11 points, depending on the situation
+        if (card.value === 1 && totalValue < 11)
+            return 11;
+        // Face cards are worth 10 points
+        else if (card.value > 10)
+            return 10;
+        // All other cards are worth their pip value
+        return card.value;
     }
 
     // dealer logic guidelines: 
