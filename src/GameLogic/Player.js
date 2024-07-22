@@ -15,11 +15,6 @@ class Player {
          */
         this.name = name;
         /**
-         * Player's current bet
-         * @type {Number}
-         */
-        this.bet = 0;
-        /**
          * Player's current score
          * @type {Number}
          */
@@ -29,6 +24,22 @@ class Player {
          * @type {Array<Card>}
          */
         this.cards = [];
+        /**
+         * Check for if player has busted
+         * @type {Boolean}
+         */
+        this.isBusted = false;
+        /**
+         * Check for if player is standing
+         * @type {Boolean}
+         */
+        this.isStanding = false;
+    }
+
+    reset() {
+        this.score = 0;
+        this.cards = [];
+        this.isBusted = false;
     }
     
     // function for if player hits
@@ -40,16 +51,11 @@ class Player {
         this.score = this.game.getTotal(this.cards);
         // If score > 21, bust
         if (this.score > 21)
-            this.bust()
+            this.isBusted = true;
     }
 
     // function for if the player stands
     stay(){
-
-    }
-
-    // function for if player busts
-    bust(){
-
+        this.isStanding = true;
     }
 }
