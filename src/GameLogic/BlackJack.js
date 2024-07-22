@@ -1,12 +1,14 @@
 class BlackJack{
     constructor(username) {
-        this.username = username;
-        this.bet = {
-          user: 0,
-          cpu:0 
+        this.players = {
+          user: new Player(this, username),
+          cpu: new Player(this, "Dealer"),
         },
         this.gameHistoryLog = [];
+        this.deck = [];
     }
+
+    // ===== Static Fields =====
 
     // List of all 52 playing cards
     // Each list item is an object with 2 fields, suit and value
@@ -14,33 +16,41 @@ class BlackJack{
     // The value field is a number representing the card's pip value (1-13)
     static allCard = generateCards();
 
+    // ===== Field-Related Methods =====
+
     // Generates list of card objects, including suit and value
     generateCards() {
         const cards = [];
         // Suits written to match card image file format
         const suits = [ 'clubs', 'diamonds', 'hearts', 'spades' ];
         suits.forEach(suit => {
-            for (let i = 1; i <= 13; i++)
-                cards.push({ suit, value: i });
+            for (let value = 1; value <= 13; value++)
+                cards.push(new Card(suit, value));
         });
         return cards;
     }
-    
-    // function for if player hits
-    hit(userCards) {
-        
-        
+
+    // Returns randomized deck of 52 cards
+    shuffleDeck() {
+        // Get deck information
+        const _allCardCopy = [...allCard];
+        const cardsInDeck = allCard.length;
+        const shuffledCards = [];
+
+        for (let i = 0; i < cardsInDeck; i++) {
+            // Get random index in _allCardCopy
+            const index = Math.floor(Math.random() * _allCardCopy.length);
+            // Remove random card from _allCardCopy, store in card
+            const card = _allCardCopy.splice(index, 1);
+            // Add removed card to shuffledCards
+            shuffledCards.push(...card);
+        }
+
+        // Return shuffled deck of cards
+        return shuffledCards;
     }
 
-    // function for if the player stands
-    stay(){
-
-    }
-
-    // function for if player busts
-    bust(){
-
-    }
+    // ===== Game-Related Fields =====
 
     // function that makes sure the player or cpu has not busted
     getTotal(userCards){
@@ -54,10 +64,6 @@ class BlackJack{
         _userCards.forEach(card => {
             totalValue += this.getCardValue(card, totalValue);
         });
-        
-        if(totalValue>21){
-            this.bust();
-        }
         
         return totalValue;
     }
@@ -77,12 +83,12 @@ class BlackJack{
     // researching learned that dealer logic is different than player
     // if dealer is 16 or lower, they are required to hit
     // 17 or higher means they need to stay. Easy logic
-    dealerChoice(userCards){
-        const dealerTotal = this.getTotal(userCards);
+    dealerChoice(){
+        const dealerTotal = this.getTotal(this.players.cpu.cards);
         if(dealerTotal >= 17){
-            this.stay();
+            this.players.cpu.stay();
         }else{
-            this.hit();
+            this.players.cpu.hit();
         }
     }
 
