@@ -108,21 +108,18 @@ function create(){
     .on('pointerup', () => standBtn.setTint('0x0099cc') )
     ;
    
-   }
-
-  function standBtnPressed(){
-    standBtn.setTint('0x006800')
-    
-  }
-
-  function hitBtnPressed(){
-    hitBtn.setTint('0x006800')
-  }
-
- 
-
+}
 
 function update(){
     
 
+}
+
+function standBtnPressed(){
+    standBtn.setTint('0x006800')
+    player = new Player;
+}
+
+function hitBtnPressed(){
+    hitBtn.setTint('0x006800')
 }
