@@ -18,12 +18,12 @@ class BlackJack{
     // Each list item is an object with 2 fields, suit and value
     // The suit field is a string representing the card's suit ("clubs", "diamonds", "hearts", or "spades")
     // The value field is a number representing the card's pip value (1-13)
-    static allCard = generateCards();
+    static allCard = BlackJack.generateCards();
 
     // ===== Field-Related Methods =====
 
     // Generates list of card objects, including suit and value
-    generateCards() {
+    static generateCards() {
         const cards = [];
         // Suits written to match card image file format
         const suits = [ 'clubs', 'diamonds', 'hearts', 'spades' ];
@@ -37,8 +37,8 @@ class BlackJack{
     // Returns randomized deck of 52 cards
     shuffleDeck() {
         // Get deck information
-        const _allCardCopy = [...allCard];
-        const cardsInDeck = allCard.length;
+        const _allCardCopy = [...BlackJack.allCard];
+        const cardsInDeck = BlackJack.allCard.length;
         const shuffledCards = [];
 
         for (let i = 0; i < cardsInDeck; i++) {
