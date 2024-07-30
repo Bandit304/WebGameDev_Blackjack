@@ -82,14 +82,8 @@ class BlackJack{
     // Places a bet for the user
     placeBet(bet) {
         if (bet <= this.balance) {
-            this.balance -= bet;
             this.bet = bet;
         }
-    }
-
-    // Attempts to double the user's bet
-    doubleDown() {
-        this.placeBet(this.bet);
     }
 
     checkForWin() {
@@ -114,10 +108,11 @@ class BlackJack{
     // Handles paying back bets at the end of the game
     payBet() {
         if (this.isOver){
-            if (this.didWin){
-                this.balance += this.bet * 2;
-                localStorage.setItem("balance", this.balance);
-            }
+            if (this.didWin)
+                this.balance += this.bet;
+            else
+                this.balance -= this.bet;
+            localStorage.setItem("balance", this.balance);
             this.bet = 0;
         }
     }
