@@ -7,7 +7,6 @@ class BlackJackScene extends Phaser.Scene {
 
     preload() {        
         this.load.image('deck', 'Assets/card-back1.png');
-        console.log("Loaded deck image");
 
         // Load cards
         const suits = ['clubs', 'diamonds', 'hearts', 'spades'];
@@ -184,18 +183,21 @@ class BlackJackScene extends Phaser.Scene {
 
     hitBtnPressed() {
         
-        if(!Player.isBusted || !Player.isStanding){
-            this.hitBtn.setTint('0x006800');
+        // if(!Player.isBusted || !Player.isStanding){
+        this.hitBtn.setTint('0x006800');
 
-            const Player = this.blackJackGame.players.user;
-            Player.hit();
+        const player = this.blackJackGame.players.user;
+        player.hit();
 
-        }
+        // }
           // Check results
-          this.blackJackGame.checkForWin();
-          this.blackJackGame.payBet();
+        //   this.blackJackGame.checkForWin();
+        //   this.blackJackGame.payBet();
+
+        if (player.score >= 21)
+            this.standBtnPressed();
           
-          this.update();
+        this.update();
         
     }
 
