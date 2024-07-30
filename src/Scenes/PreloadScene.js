@@ -8,7 +8,7 @@ class PreloadScene extends Phaser.Scene {
     // ===== Phaser.Scene Overrides =====
 
     preload(){
-        this.load.image('deck', '/Assets/card-back1.png');
+        this.load.image("deck", "Assets/card-back1.png");
     
         // Load cards
         const suits = [ 'clubs', 'diamonds', 'hearts', 'spades' ];

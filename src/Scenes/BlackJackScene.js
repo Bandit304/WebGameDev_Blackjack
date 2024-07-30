@@ -5,15 +5,30 @@ class BlackJackScene extends Phaser.Scene {
         super("BlackJackScene");
     }
 
+    preload() {        
+        this.load.image('deck', 'Assets/card-back1.png');
+        console.log("Loaded deck image");
+
+        // Load cards
+        const suits = ['clubs', 'diamonds', 'hearts', 'spades'];
+        suits.forEach(suit => {
+            for (let i = 1; i <= 13; i++) {
+                this.load.image(`${suit}-${i}`, `Assets/card-${suit}-${i}.png`);
+            }
+        });
+    }
+
     // ===== Phaser.Scene Overrides =====
 
-    create(){
+    create() {
+        this.blackJackGame = new BlackJack('Player');
+
         this.deck = this.physics.add.image(
             this.physics.world.bounds.width / 2, // x position
             this.physics.world.bounds.height / 2, // y position
             'deck'
         );
-    
+
         this.dealerText = this.add.text(
             (this.physics.world.bounds.width / 6) * 4 + 20,
             this.physics.world.bounds.height - 570,
@@ -24,7 +39,7 @@ class BlackJackScene extends Phaser.Scene {
                 fill: '#fff'
             }
         );
-    
+
         this.playerText = this.add.text(
             (this.physics.world.bounds.width / 8) - 20,
             this.physics.world.bounds.height - 570,
@@ -35,7 +50,7 @@ class BlackJackScene extends Phaser.Scene {
                 fill: '#fff'
             }
         );
-    
+
         this.balanceBetText = this.add.text(
             (this.physics.world.bounds.width / 6) * 2 + 60,
             this.physics.world.bounds.height - 570,
@@ -47,7 +62,7 @@ class BlackJackScene extends Phaser.Scene {
                 align: 'center'
             }
         );
-    
+
         //buttons
         this.hitBtn = this.add.text(
             (this.physics.world.bounds.width / 8) ,
@@ -65,7 +80,8 @@ class BlackJackScene extends Phaser.Scene {
             .on('pointerout', () => this.hitBtn.clearTint() )
             .on('pointerdown', () => this.hitBtnPressed() )  //on button press
             .on('pointerup', () => this.hitBtn.setTint('0x0099cc') ); 
-    
+
+
         this.standBtn = this.add.text(
             (this.physics.world.bounds.width / 6) * 4 + 20,
             this.physics.world.bounds.height - 30,
@@ -82,21 +98,47 @@ class BlackJackScene extends Phaser.Scene {
             .on('pointerout', () => this.standBtn.clearTint() )
             .on('pointerdown', () => this.standBtnPressed() )  //on button press
             .on('pointerup', () => this.standBtn.setTint('0x0099cc') );
-       
+    
+        // Start a new game
+        this.blackJackGame.resetGame();
+        this.update();
     }
     
     update(){
-        
+        //update text
+        this.playerText.setText(`player: ${this.blackJackGame.players.user.score}`);
+        this.dealerText.setText(`dealer: ${this.blackJackGame.players.cpu.score}`);
+        this.balanceBetText.setText(`balance: ${this.blackJackGame.balance}\nbet: ${this.blackJackGame.bet}`);
     }
 
     // ===== Methods =====
 
-    standBtnPressed(){
-        this.standBtn.setTint('0x006800')
-        this.player = new Player;
+    standBtnPressed() {
+        this.standBtn.setTint('0x006800');
+        //this.player = new Player;
+
+        const Player = this.blackJackGame.players.user;
+        Player.stay();
+        
+        this.blackJackGame.dealerChoice();
+        
+        // Check results
+        this.blackJackGame.checkForWin();
+        this.blackJackGame.payBet();
+        
+        this.update();
     }
-    
-    hitBtnPressed(){
-        this.hitBtn.setTint('0x006800')
+
+    hitBtnPressed() {
+        this.hitBtn.setTint('0x006800');
+
+        const Player = this.blackJackGame.players.user;
+        Player.hit();
+        
+        // Check results
+        this.blackJackGame.checkForWin();
+        this.blackJackGame.payBet();
+        
+        this.update();
     }
 }
