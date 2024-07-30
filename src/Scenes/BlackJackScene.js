@@ -8,6 +8,7 @@ class BlackJackScene extends Phaser.Scene {
     // ===== Phaser.Scene Overrides =====
 
     init(data) {
+        // Receive BlackJack object from betting scene
         this.blackJackGame = data.blackJackGame;
     }
 
@@ -122,6 +123,7 @@ class BlackJackScene extends Phaser.Scene {
             .on('pointerdown', () => {  //on button press
                 this.resetBtn.setTint('0x006800');
                 this.resetBtnPressed();
+                this.scene.start("BettingScene", { blackJackGame: this.blackJackGame });
             })
             .on('pointerup', () => this.resetBtn.setTint('0x0099cc') );
     

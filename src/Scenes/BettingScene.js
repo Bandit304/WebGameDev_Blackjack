@@ -5,10 +5,17 @@ class BettingScene extends Phaser.Scene {
     }
 
     // ===== Phaser.Scene Overrides =====
-    create() {
-        // Create game
-        this.blackJackGame = new BlackJack('Player');
 
+    init(data) {
+        // If starting new game, create new BlackJack object
+        if (!data?.blackJackGame)
+            this.blackJackGame = new BlackJack('Player');
+        // If resetting, receive BlackJack object from BlackJackScene
+        else
+            this.blackJackGame = data.blackJackGame;
+    }
+
+    create() {
         // Create fields
         this.sceneWidth = this.physics.world.bounds.width;
         this.sceneHeight = this.physics.world.bounds.height;
