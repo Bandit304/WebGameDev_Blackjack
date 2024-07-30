@@ -132,7 +132,10 @@ class BlackJackScene extends Phaser.Scene {
         this.hitBtn.setInteractive()
             .on('pointerover', () => this.hitBtn.setTint('0x0099cc'))
             .on('pointerout', () => this.hitBtn.clearTint() )
-            .on('pointerdown', () => this.hitBtnPressed() )  //on button press
+            .on('pointerdown', () => {  //on button press
+                this.hitBtn.setTint('0x006800');
+                this.hitBtnPressed();
+            })
             .on('pointerup', () => this.hitBtn.setTint('0x0099cc') ); 
 
 
@@ -151,7 +154,10 @@ class BlackJackScene extends Phaser.Scene {
         this.standBtn.setInteractive()
             .on('pointerover', () => this.standBtn.setTint('0x0099cc'))
             .on('pointerout', () => this.standBtn.clearTint() )
-            .on('pointerdown', () => this.standBtnPressed() )  //on button press
+            .on('pointerdown', () => {  //on button press
+                this.standBtn.setTint('0x006800');
+                this.standBtnPressed();
+            })
             .on('pointerup', () => this.standBtn.setTint('0x0099cc') );
 
         this.resetBtn = this.add.text(
@@ -169,7 +175,10 @@ class BlackJackScene extends Phaser.Scene {
         this.resetBtn.setInteractive()
             .on('pointerover', () => this.resetBtn.setTint('0x0099cc'))
             .on('pointerout', () => this.resetBtn.clearTint() )
-            .on('pointerdown', () => this.resetBtnPressed() )  //on button press
+            .on('pointerdown', () => {  //on button press
+                this.resetBtn.setTint('0x006800');
+                this.resetBtnPressed();
+            })
             .on('pointerup', () => this.resetBtn.setTint('0x0099cc') );
     
         // Start a new game
@@ -187,9 +196,6 @@ class BlackJackScene extends Phaser.Scene {
     // ===== Methods =====
 
     standBtnPressed() {
-        this.standBtn.setTint('0x006800');
-        //this.player = new Player;
-
         const Player = this.blackJackGame.players.user;
         Player.stay();
         
@@ -201,8 +207,6 @@ class BlackJackScene extends Phaser.Scene {
     }
 
     hitBtnPressed() {
-        this.hitBtn.setTint('0x006800');
-
         const player = this.blackJackGame.players.user;
         player.hit();
 
@@ -212,7 +216,6 @@ class BlackJackScene extends Phaser.Scene {
     }
 
     resetBtnPressed() {
-        this.resetBtn.setTint('0x006800');
         this.blackJackGame.resetGame();
     }
 
