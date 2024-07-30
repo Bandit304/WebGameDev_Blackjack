@@ -50,10 +50,11 @@ class Player {
         // Calculate player score
         this.score = this.game.getTotal(this.cards);
         // If score > 21, bust
-        if (this.score > 21){
+        if (this.score > 21) {
             this.isBusted = true;
         }
-            
+        // Return drawn card
+        return card;
     }
 
     // function for if the player stands

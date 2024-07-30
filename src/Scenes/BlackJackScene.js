@@ -11,6 +11,8 @@ class BlackJackScene extends Phaser.Scene {
         this.blackJackGame = new BlackJack('Player');
         this.player = this.blackJackGame.players.user;
         this.dealer = this.blackJackGame.players.cpu;
+        this.playerHand = [];
+        this.dealerHand = [];
 
         this.deck = this.physics.add.image(
             this.physics.world.bounds.width / 2, // x position
@@ -189,15 +191,43 @@ class BlackJackScene extends Phaser.Scene {
         this.player.stay();
         
         this.blackJackGame.dealerChoice();
+
+        this.dealer.cards.forEach(card => {
+            const cardSprite = new CardSprite(this, 0, 0, card.suit, card.value);
+            this.dealerHand.push(cardSprite)
+            const cardWidth = 96;
+            const cardHeight = 144;
+            const x = ((this.dealerHand.length - 1) % 3) * (cardWidth + 10);
+            const y = Math.floor((this.dealerHand.length - 1) / 3) * (cardHeight + 10);
+            const sceneWidth = this.physics.world.bounds.width;
+            cardSprite.x = sceneWidth - (cardWidth / 2 + 20 + x);
+            cardSprite.y = 200 + y;
+        });
         
         // Check results
         this.blackJackGame.checkForWin();
         this.blackJackGame.payBet();
+        
+        if (this.blackJackGame.isOver && this.blackJackGame.didWin)
+            this.displayNotification("You Win!");
+        else if (this.blackJackGame.isOver && !this.blackJackGame.didWin)
+            this.displayNotification("You Lose!");
+
     }
 
     hitBtnPressed() {
-        this.player.hit();
-
+        // Hit
+        const card = this.player.hit();
+        // Display drawn card
+        const cardSprite = new CardSprite(this, 0, 0, card.suit, card.value);
+        this.playerHand.push(cardSprite)
+        const cardWidth = 96;
+        const cardHeight = 144;
+        const x = ((this.playerHand.length - 1) % 3) * (cardWidth + 10);
+        const y = Math.floor((this.playerHand.length - 1) / 3) * (cardHeight + 10);
+        cardSprite.x = cardWidth / 2 + 20 + x;
+        cardSprite.y = 200 + y;
+        // If player score can't get higher, stand
         if (this.player.score >= 21)
             this.standBtnPressed();
         
@@ -205,6 +235,18 @@ class BlackJackScene extends Phaser.Scene {
 
     resetBtnPressed() {
         this.blackJackGame.resetGame();
+        const playerHandLength = this.playerHand.length;
+        const dealerHandLength = this.dealerHand.length;
+
+        for (let i = 0; i < playerHandLength; i++) {
+            const card = this.playerHand.pop();
+            card.destroy()
+        }
+
+        for (let i = 0; i < dealerHandLength; i++) {
+            const card = this.dealerHand.pop();
+            card.destroy()
+        }
     }
 
     betSetBtnPressed() {
@@ -223,6 +265,12 @@ class BlackJackScene extends Phaser.Scene {
         if(this.blackJackGame.bet> 0){
             this.blackJackGame.bet -= 1;
         }
-        
+    }
+
+    async displayNotification(message) {
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+            new Notification(message);
+        }
     }
 }
