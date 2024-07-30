@@ -72,6 +72,11 @@ class BlackJack{
         // Reset players
         this.players.cpu.reset();
         this.players.user.reset();
+        // Draw initial cards
+        for (let i = 0; i < 2; i++) {
+            this.players.user.hit();
+            this.players.cpu.hit();
+        }
     }
 
     // Places a bet for the user

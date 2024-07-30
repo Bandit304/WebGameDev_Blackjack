@@ -13,6 +13,7 @@ class BlackJackScene extends Phaser.Scene {
         this.dealer = this.blackJackGame.players.cpu;
         this.playerHand = [];
         this.dealerHand = [];
+        this.isDealerTurn = false;
 
         this.deck = this.physics.add.image(
             this.physics.world.bounds.width / 2, // x position
@@ -174,13 +175,16 @@ class BlackJackScene extends Phaser.Scene {
             .on('pointerup', () => this.resetBtn.setTint('0x0099cc') );
     
         // Start a new game
-        this.blackJackGame.resetGame();
+        this.resetBtnPressed();
     }
     
     update(){
         //update text
         this.playerText.setText(`player: ${this.player.score}`);
-        this.dealerText.setText(`dealer: ${this.dealer.score}`);
+        if (this.isDealerTurn)
+            this.dealerText.setText(`dealer: ${this.dealer.score}`);
+        else
+            this.dealerText.setText(`dealer: ???`);
         this.balanceBetText.setText(`balance: ${this.blackJackGame.balance}\nbet: ${this.blackJackGame.bet}`);
         
     }
@@ -188,25 +192,13 @@ class BlackJackScene extends Phaser.Scene {
     // ===== Methods =====
 
     standBtnPressed() {
+        this.isDealerTurn = true;
+
         this.player.stay();
         
         this.blackJackGame.dealerChoice();
 
-        this.dealer.cards.forEach(card => {
-            // Create card sprite
-            const cardSprite = new CardSprite(this, 0, 0, card.suit, card.value);
-            // Add card sprite to hand
-            this.dealerHand.push(cardSprite)
-            // Calculate relative position of card sprite
-            const cardWidth = 96;
-            const cardHeight = 144;
-            const x = ((this.dealerHand.length - 1) % 3) * (cardWidth + 10);
-            const y = Math.floor((this.dealerHand.length - 1) / 3) * (cardHeight + 10);
-            // Calculate position of cardsprite relative to scene
-            const sceneWidth = this.physics.world.bounds.width;
-            cardSprite.x = sceneWidth - (cardWidth / 2 + 20 + x);
-            cardSprite.y = 200 + y;
-        });
+        this.displayDealerHand();
         
         // Check results
         this.blackJackGame.checkForWin();
@@ -221,20 +213,9 @@ class BlackJackScene extends Phaser.Scene {
 
     hitBtnPressed() {
         // Hit
-        const card = this.player.hit();
-        // === Display drawn card ===
-        // Create card sprite
-        const cardSprite = new CardSprite(this, 0, 0, card.suit, card.value);
-        // Add card sprite to hand
-        this.playerHand.push(cardSprite)
-        // Calculate relative position of card sprite
-        const cardWidth = 96;
-        const cardHeight = 144;
-        const x = ((this.playerHand.length - 1) % 3) * (cardWidth + 10);
-        const y = Math.floor((this.playerHand.length - 1) / 3) * (cardHeight + 10);
-        // Calculate position of cardsprite relative to scene
-        cardSprite.x = cardWidth / 2 + 20 + x;
-        cardSprite.y = 200 + y;
+        this.player.hit();
+        // Display drawn card
+        this.displayPlayerHand();
         // If player score can't get higher, stand
         if (this.player.score >= 21)
             this.standBtnPressed();
@@ -244,21 +225,67 @@ class BlackJackScene extends Phaser.Scene {
     resetBtnPressed() {
         // Reset game logic
         this.blackJackGame.resetGame();
+        this.isDealerTurn = false;
 
-        // Get hand lengths
+        // Display Initial Hands
+        this.displayPlayerHand();
+        this.displayDealerHand();
+    }
+
+    displayPlayerHand() {
+        // === Reset player hand ===
         const playerHandLength = this.playerHand.length;
-        const dealerHandLength = this.dealerHand.length;
-
-        // Reset UI for player hand
         for (let i = 0; i < playerHandLength; i++) {
-            const card = this.playerHand.pop();
-            card.destroy()
+            const cardSprite = this.playerHand.pop();
+            cardSprite.destroy()
         }
 
-        // Reset UI for dealer hand
+        // === Display player hand ===
+        for (let i = 0; i < this.player.cards.length; i++) {
+            // Get card
+            const card = this.player.cards[i];
+            // Create card sprite
+            const cardSprite = new CardSprite(this, 0, 0, card.suit, card.value);
+            // Add cardsprite to hand
+            this.playerHand.push(cardSprite);
+            // Calculate relative position of card sprite
+            const cardWidth = 96;
+            const cardHeight = 144;
+            const x = (i % 3) * (cardWidth + 10);
+            const y = Math.floor(i / 3) * (cardHeight + 10);
+            // Calculate position of cardsprite relative to scene
+            cardSprite.x = cardWidth / 2 + 20 + x;
+            cardSprite.y = 200 + y;
+        }
+    }
+
+    displayDealerHand() {
+        // === Reset dealer hand ===
+        const dealerHandLength = this.dealerHand.length;
         for (let i = 0; i < dealerHandLength; i++) {
-            const card = this.dealerHand.pop();
-            card.destroy()
+            const cardSprite = this.dealerHand.pop();
+            cardSprite.destroy()
+        }
+
+        // === Display player hand ===
+        for (let i = 0; i < this.player.cards.length; i++) {
+            // Get card
+            const card = this.player.cards[i];
+            // Create card sprite
+            const cardSprite = new CardSprite(this, 0, 0, card.suit, card.value);
+            if (i === 0 && !this.isDealerTurn)
+                cardSprite.flip();
+            // Add cardsprite to hand
+            this.dealerHand.push(cardSprite);
+            // Calculate relative position of card sprite
+            const cardWidth = 96;
+            const cardHeight = 144;
+            const x = (i % 3) * (cardWidth + 10);
+            const y = Math.floor(i / 3) * (cardHeight + 10);
+            // Calculate position of cardsprite relative to scene
+            const sceneWidth = this.physics.world.bounds.width;
+            cardSprite.x = sceneWidth - (cardWidth / 2 + 20 + x);
+            cardSprite.y = 200 + y;
         }
     }
 
