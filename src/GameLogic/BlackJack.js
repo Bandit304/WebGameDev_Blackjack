@@ -103,9 +103,13 @@ class BlackJack{
 
     // Handles paying back bets at the end of the game
     payBet() {
-        if (this.didWin)
-            this.balance += this.bet * 2;
-        this.bet = 0;
+        if (this.isOver){
+            if (this.didWin){
+                this.balance += this.bet * 2;
+            }
+            this.bet = 0;
+        }
+           
     }
 
     // function that makes sure the player or cpu has not busted
