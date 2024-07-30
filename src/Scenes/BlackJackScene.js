@@ -21,6 +21,8 @@ class BlackJackScene extends Phaser.Scene {
 
     create() {
         this.blackJackGame = new BlackJack('Player');
+        this.player = this.blackJackGame.players.user;
+        this.dealer = this.blackJackGame.players.cpu;
 
         this.deck = this.physics.add.image(
             this.physics.world.bounds.width / 2, // x position
@@ -187,8 +189,8 @@ class BlackJackScene extends Phaser.Scene {
     
     update(){
         //update text
-        this.playerText.setText(`player: ${this.blackJackGame.players.user.score}`);
-        this.dealerText.setText(`dealer: ${this.blackJackGame.players.cpu.score}`);
+        this.playerText.setText(`player: ${this.player.score}`);
+        this.dealerText.setText(`dealer: ${this.dealer.score}`);
         this.balanceBetText.setText(`balance: ${this.blackJackGame.balance}\nbet: ${this.blackJackGame.bet}`);
         
     }
@@ -196,8 +198,7 @@ class BlackJackScene extends Phaser.Scene {
     // ===== Methods =====
 
     standBtnPressed() {
-        const Player = this.blackJackGame.players.user;
-        Player.stay();
+        this.player.stay();
         
         this.blackJackGame.dealerChoice();
         
@@ -207,10 +208,9 @@ class BlackJackScene extends Phaser.Scene {
     }
 
     hitBtnPressed() {
-        const player = this.blackJackGame.players.user;
-        player.hit();
+        this.player.hit();
 
-        if (player.score >= 21)
+        if (this.player.score >= 21)
             this.standBtnPressed();
         
     }
