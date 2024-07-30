@@ -14,7 +14,7 @@ class PreloadScene extends Phaser.Scene {
         const suits = [ 'clubs', 'diamonds', 'hearts', 'spades' ];
         suits.forEach(suit => {
             for (let i = 1; i <= 13; i++)
-                this.load.image(`${suit}-${i}`, `/Assets/card-${suit}-${i}.png`);
+                this.load.image(`${suit}-${i}`, `Assets/card-${suit}-${i}.png`);
         });
     }
 
