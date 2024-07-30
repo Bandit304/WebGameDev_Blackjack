@@ -151,9 +151,8 @@ class BlackJack{
     // 17 or higher means they need to stay. Easy logic
     dealerChoice(){
         const dealerTotal = this.getTotal(false, this.players.cpu.cards);
-        for (let i = dealerTotal; i <= 17; i++) {     
+        for (let i = dealerTotal; i <= 17; i = this.getTotal(false, this.players.cpu.cards)) {     
             this.players.cpu.hit();
-            i = this.getTotal(false, this.players.cpu.cards);
         }
         this.players.cpu.stay();
     }
