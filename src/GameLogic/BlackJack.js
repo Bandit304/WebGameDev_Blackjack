@@ -109,7 +109,7 @@ class BlackJack{
     }
 
     // function that makes sure the player or cpu has not busted
-    getTotal(userCards){
+    getTotal(user, userCards){
         // Make copy of userCards so original array is not affected by sorting
         const _userCards = [...userCards];
         // Sort userCards from greates value to lowest so aces are processed last
@@ -121,6 +121,20 @@ class BlackJack{
             totalValue += this.getCardValue(card, totalValue);
         });
         
+        if(totalValue > 21){
+            if(user = player){
+                this.players.user.isBusted = true;
+            }else{
+                this.players.cpu.isBusted = true;
+            }   
+        }else{
+            if(user = player){
+                this.players.user.isBusted = false;
+            }else{
+                this.players.cpu.isBusted = false;
+            }   
+        }
+
         return totalValue;
     }
 
@@ -140,7 +154,7 @@ class BlackJack{
     // if dealer is 16 or lower, they are required to hit
     // 17 or higher means they need to stay. Easy logic
     dealerChoice(){
-        const dealerTotal = this.getTotal(this.players.cpu.cards);
+        const dealerTotal = this.getTotal(cpu, this.players.cpu.cards);
         if(dealerTotal >= 17){
             this.players.cpu.stay();
         }else{
