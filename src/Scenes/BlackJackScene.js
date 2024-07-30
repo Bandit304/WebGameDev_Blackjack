@@ -81,7 +81,7 @@ class BlackJackScene extends Phaser.Scene {
             .on('pointerup', () => this.betIncraseBtn.setTint('0x0099cc') );
 
         this.betDecreaseBtn = this.add.text(
-            (this.physics.world.bounds.width / 6) * 2 + 60,
+            (this.physics.world.bounds.width / 6) * 2 + 55,
             this.physics.world.bounds.height - 540,
             'LESS',
             {
@@ -97,7 +97,22 @@ class BlackJackScene extends Phaser.Scene {
             .on('pointerdown', () => this.betDecreaseBtnPressed() )  //on button press
             .on('pointerup', () => this.betDecreaseBtn.setTint('0x0099cc') );
     
-
+            this.betSetBtn = this.add.text(
+                (this.physics.world.bounds.width / 6) * 2 + 100,
+                this.physics.world.bounds.height - 520,
+                'SET BET',
+                {
+                    fontFamily: 'Monaco, Courier, monospace',
+                    fontSize: '12px',
+                    fill: '#fff',
+                    align: 'center'
+                }
+            );
+            this.betSetBtn.setInteractive()
+                .on('pointerover', () => this.betSetBtn.setTint('0x0099cc'))
+                .on('pointerout', () => this.betSetBtn.clearTint() )
+                .on('pointerdown', () => this.betSetBtnPressed() )  //on button press
+                .on('pointerup', () => this.betSetBtn.setTint('0x0099cc') );
 
 
         //buttons
@@ -180,15 +195,22 @@ class BlackJackScene extends Phaser.Scene {
         this.update();
     }
 
-    
+    betSetBtnPressed() {
+        this.betSetBtn.setTint('0x006800');
+        this.blackJackGame.placeBet(this.blackJackGame.bet);
+    }
     betIncreaseBtnPressed(){
         this.betIncraseBtn.setTint('0x006800');
-        this.blackJackGame.placeBet(this.blackJackGame.bet + 1);
+        if(this.blackJackGame.bet>= 0){this.blackJackGame.bet += 1;}
+        
         
     }
 
     betDecreaseBtnPressed(){
         this.betDecreaseBtn.setTint('0x006800');
-        this.blackJackGame.placeBet(this.blackJackGame.bet - 1);
+        if(this.blackJackGame.bet> 0){
+            this.blackJackGame.bet -= 1;
+        }
+        
     }
 }
