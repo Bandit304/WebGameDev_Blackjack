@@ -7,8 +7,11 @@ class BlackJackScene extends Phaser.Scene {
 
     // ===== Phaser.Scene Overrides =====
 
+    init(data) {
+        this.blackJackGame = data.blackJackGame;
+    }
+
     create() {
-        this.blackJackGame = new BlackJack('Player');
         this.player = this.blackJackGame.players.user;
         this.dealer = this.blackJackGame.players.cpu;
         this.playerHand = [];

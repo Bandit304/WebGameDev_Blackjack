@@ -14,10 +14,18 @@ class TextButton extends Phaser.GameObjects.Text {
             },
         );
 
+        // Add button to scene
+        this.scene = scene;
+        this.scene.add.existing(this);
+
+        // Save onPress callback to field
         this.onPress = onPress;
 
+        // Set origin to center of button
+        this.setOrigin(0.5, 0.5);
+
+        // Set interactivity
         this.setInteractive()
-        this.hitBtn.setInteractive()
             .on('pointerover', () => this.setTint('0x0099cc'))
             .on('pointerout', () => this.clearTint() )
             .on('pointerdown', () => {  //on button press

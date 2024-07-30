@@ -4,7 +4,7 @@ window.onload = () => {
         parent: 'game',
         width: 800,
         height: 600,
-        scene: [ PreloadScene, BlackJackScene ],
+        scene: [ PreloadScene, BettingScene, BlackJackScene ],
         physics: {
             default: 'arcade',
             arcade: {
