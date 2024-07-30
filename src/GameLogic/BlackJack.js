@@ -73,7 +73,7 @@ class BlackJack{
     placeBet(bet) {
         if (bet <= this.balance) {
             this.balance -= bet;
-            this.bet += bet;
+            this.bet = bet;
         }
     }
 

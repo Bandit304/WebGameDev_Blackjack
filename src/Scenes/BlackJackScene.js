@@ -77,7 +77,7 @@ class BlackJackScene extends Phaser.Scene {
         this.betIncraseBtn.setInteractive()
             .on('pointerover', () => this.betIncraseBtn.setTint('0x0099cc'))
             .on('pointerout', () => this.betIncraseBtn.clearTint() )
-            .on('pointerdown', () => this.betIncreaseBtnPressed )  //on button press
+            .on('pointerdown', () => this.betIncreaseBtnPressed() )  //on button press
             .on('pointerup', () => this.betIncraseBtn.setTint('0x0099cc') );
 
         this.betDecreaseBtn = this.add.text(
@@ -94,7 +94,7 @@ class BlackJackScene extends Phaser.Scene {
         this.betDecreaseBtn.setInteractive()
             .on('pointerover', () => this.betDecreaseBtn.setTint('0x0099cc'))
             .on('pointerout', () => this.betDecreaseBtn.clearTint() )
-            .on('pointerdown', () => this.betDecreaseBtnPressed )  //on button press
+            .on('pointerdown', () => this.betDecreaseBtnPressed() )  //on button press
             .on('pointerup', () => this.betDecreaseBtn.setTint('0x0099cc') );
     
 
@@ -180,11 +180,15 @@ class BlackJackScene extends Phaser.Scene {
         this.update();
     }
 
+    
     betIncreaseBtnPressed(){
-
+        this.betIncraseBtn.setTint('0x006800');
+        this.blackJackGame.placeBet(this.blackJackGame.bet + 1);
+        
     }
 
     betDecreaseBtnPressed(){
-        
+        this.betDecreaseBtn.setTint('0x006800');
+        this.blackJackGame.placeBet(this.blackJackGame.bet - 1);
     }
 }
