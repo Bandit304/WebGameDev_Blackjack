@@ -62,69 +62,38 @@ class BlackJackScene extends Phaser.Scene {
         //buttons
         const sceneWidth = this.physics.world.bounds.width;
 
-        this.hitBtn = this.add.text(
+        this.hitBtn = new TextButton(
+            this,
             (sceneWidth / 8),
             this.physics.world.bounds.height - 30,
             'HIT',
-            {
-                fontFamily: 'Monaco, Courier, monospace',
-                fontSize: '30px',
-                fill: '#fff',
-                align: 'center'
-            }
-        );
-        this.hitBtn.setOrigin(0.5, 0.5);
-        this.hitBtn.setInteractive()
-            .on('pointerover', () => this.hitBtn.setTint('0x0099cc'))
-            .on('pointerout', () => this.hitBtn.clearTint() )
-            .on('pointerdown', () => {  //on button press
+            () => {  //on button press
                 this.hitBtn.setTint('0x006800');
                 this.hitBtnPressed();
-            })
-            .on('pointerup', () => this.hitBtn.setTint('0x0099cc') ); 
+            }
+        );
 
-
-        this.standBtn = this.add.text(
+        this.standBtn = new TextButton(
+            this,
             sceneWidth * (7 / 8),
             this.physics.world.bounds.height - 30,
             'STAND',
-            {
-                fontFamily: 'Monaco, Courier, monospace',
-                fontSize: '30px',
-                fill: '#fff',
-                align: 'center'
-            }
-        );
-        this.standBtn.setOrigin(0.5, 0.5);
-        this.standBtn.setInteractive()
-            .on('pointerover', () => this.standBtn.setTint('0x0099cc'))
-            .on('pointerout', () => this.standBtn.clearTint() )
-            .on('pointerdown', () => {  //on button press
+            () => {  //on button press
                 this.standBtn.setTint('0x006800');
                 this.standBtnPressed();
-            })
-            .on('pointerup', () => this.standBtn.setTint('0x0099cc') );
+            }
+        );
 
-        this.resetBtn = this.add.text(
+        this.resetBtn = new TextButton(
+            this,
             this.physics.world.bounds.width / 2,
             this.physics.world.bounds.height - 30,
             "RESET",
-            {
-                fontFamily: 'Monaco, Courier, monospace',
-                fontSize: '30px',
-                fill: '#fff',
-                align: 'center'
-            }
-        );
-        this.resetBtn.setOrigin(0.5, 0.5);
-        this.resetBtn.setInteractive()
-            .on('pointerover', () => this.resetBtn.setTint('0x0099cc'))
-            .on('pointerout', () => this.resetBtn.clearTint() )
-            .on('pointerdown', () => {  //on button press
+            () => {  //on button press
                 this.resetBtn.setTint('0x006800');
                 this.scene.start("BettingScene", { blackJackGame: this.blackJackGame });
-            })
-            .on('pointerup', () => this.resetBtn.setTint('0x0099cc') );
+            }
+        );
     
         // Start a new game
         this.resetGame();
