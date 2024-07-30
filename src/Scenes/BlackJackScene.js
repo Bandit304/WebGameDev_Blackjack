@@ -94,6 +94,8 @@ class BlackJackScene extends Phaser.Scene {
                 this.scene.start("BettingScene", { blackJackGame: this.blackJackGame });
             }
         );
+        // Hide reset button initially
+        this.resetBtn.visible = false;
     
         // Start a new game
         this.resetGame();
@@ -130,6 +132,11 @@ class BlackJackScene extends Phaser.Scene {
         else if (this.blackJackGame.isOver && !this.blackJackGame.didWin)
             this.displayNotification("You Lose!");
 
+        // Hide hit/stand buttons
+        this.hitBtn.visible = false;
+        this.standBtn.visible = false;
+        // Display reset button
+        this.resetBtn.visible = true;
     }
 
     hitBtnPressed() {
