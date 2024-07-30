@@ -6,11 +6,11 @@ class BlackJack{
         },
         this.isOver = false;
         this.didWin = false;
-        if(localStorage.getItem('balance') === null){
+        if(!localStorage.getItem('balance')){
             localStorage.setItem('balance', 100);
             this.balance = 100;
         }else{
-            this.balance = localStorage.getItem('balance');
+            this.balance = Number(localStorage.getItem('balance'));
         }
         this.bet = 0;
         this.gameHistoryLog = [];
@@ -65,8 +65,6 @@ class BlackJack{
         // Reset game end flags
         this.isOver = false;
         this.didWin = false;
-        // Reset bet
-        this.bet = 0;
         // Shuffle deck
         this.deck = this.shuffleDeck();
         // Reset players
