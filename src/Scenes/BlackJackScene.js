@@ -230,6 +230,9 @@ class BlackJackScene extends Phaser.Scene {
         // Display Initial Hands
         this.displayPlayerHand();
         this.displayDealerHand();
+
+        if (this.player.score >= 21)
+            this.standBtnPressed();
     }
 
     displayPlayerHand() {
