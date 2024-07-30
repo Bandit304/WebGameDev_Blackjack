@@ -48,7 +48,7 @@ class Player {
         const card = this.game.deck.pop();
         this.cards.push(card);
         // Calculate player score
-        this.score = this.game.getTotal(this.cards);
+        this.score = this.game.getTotal(player, this.cards);
         // If score > 21, bust
         if (this.score > 21){
             this.isBusted = true;
