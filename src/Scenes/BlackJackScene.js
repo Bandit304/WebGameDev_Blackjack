@@ -62,6 +62,43 @@ class BlackJackScene extends Phaser.Scene {
                 align: 'center'
             }
         );
+        //bet buttons
+        this.betIncraseBtn = this.add.text(
+            (this.physics.world.bounds.width / 6) * 2 + 175,
+            this.physics.world.bounds.height - 540,
+            'MORE',
+            {
+                fontFamily: 'Monaco, Courier, monospace',
+                fontSize: '12px',
+                fill: '#fff',
+                align: 'center'
+            }
+        );
+        this.betIncraseBtn.setInteractive()
+            .on('pointerover', () => this.betIncraseBtn.setTint('0x0099cc'))
+            .on('pointerout', () => this.betIncraseBtn.clearTint() )
+            .on('pointerdown', () => this.betIncreaseBtnPressed )  //on button press
+            .on('pointerup', () => this.betIncraseBtn.setTint('0x0099cc') );
+
+        this.betDecreaseBtn = this.add.text(
+            (this.physics.world.bounds.width / 6) * 2 + 60,
+            this.physics.world.bounds.height - 540,
+            'LESS',
+            {
+                fontFamily: 'Monaco, Courier, monospace',
+                fontSize: '12px',
+                fill: '#fff',
+                align: 'center'
+            }
+        );
+        this.betDecreaseBtn.setInteractive()
+            .on('pointerover', () => this.betDecreaseBtn.setTint('0x0099cc'))
+            .on('pointerout', () => this.betDecreaseBtn.clearTint() )
+            .on('pointerdown', () => this.betDecreaseBtnPressed )  //on button press
+            .on('pointerup', () => this.betDecreaseBtn.setTint('0x0099cc') );
+    
+
+
 
         //buttons
         this.hitBtn = this.add.text(
@@ -109,6 +146,7 @@ class BlackJackScene extends Phaser.Scene {
         this.playerText.setText(`player: ${this.blackJackGame.players.user.score}`);
         this.dealerText.setText(`dealer: ${this.blackJackGame.players.cpu.score}`);
         this.balanceBetText.setText(`balance: ${this.blackJackGame.balance}\nbet: ${this.blackJackGame.bet}`);
+        
     }
 
     // ===== Methods =====
@@ -140,5 +178,13 @@ class BlackJackScene extends Phaser.Scene {
         this.blackJackGame.payBet();
         
         this.update();
+    }
+
+    betIncreaseBtnPressed(){
+
+    }
+
+    betDecreaseBtnPressed(){
+        
     }
 }
