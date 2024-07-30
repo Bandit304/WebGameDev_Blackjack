@@ -22,6 +22,6 @@ class PreloadScene extends Phaser.Scene {
         // Create animations, if necessary
 
         // Start next scene
-        this.scene.start("BlackJackScene");
+        this.scene.start("BettingScene");
     }
 }
