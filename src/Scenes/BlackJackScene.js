@@ -122,13 +122,12 @@ class BlackJackScene extends Phaser.Scene {
             .on('pointerout', () => this.resetBtn.clearTint() )
             .on('pointerdown', () => {  //on button press
                 this.resetBtn.setTint('0x006800');
-                this.resetBtnPressed();
                 this.scene.start("BettingScene", { blackJackGame: this.blackJackGame });
             })
             .on('pointerup', () => this.resetBtn.setTint('0x0099cc') );
     
         // Start a new game
-        this.resetBtnPressed();
+        this.resetGame();
     }
     
     update(){
@@ -175,7 +174,7 @@ class BlackJackScene extends Phaser.Scene {
         
     }
 
-    resetBtnPressed() {
+    resetGame() {
         // Reset game logic
         this.blackJackGame.resetGame();
         this.isDealerTurn = false;
