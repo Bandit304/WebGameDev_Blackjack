@@ -109,7 +109,19 @@ class BlackJack{
             }
             this.bet = 0;
         }
-           
+        //setTimeout(this.winNotification(),3000);
+        this.winNotification();
+    }
+
+    winNotification(){
+        if(this.didWin){
+            alert("You won!");
+        }else{
+            alert("You lost.");
+        }
+            
+        this.resetGame();
+        
     }
 
     // function that makes sure the player or cpu has not busted
