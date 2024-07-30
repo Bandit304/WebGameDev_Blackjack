@@ -6,7 +6,11 @@ class BlackJack{
         },
         this.isOver = false;
         this.didWin = false;
-        this.balance = 100;
+        if(typeof localStorage.getItem("balance") === 'undefined'){
+            this.balance = 100;
+        }else{
+            this.balance = localStorage.getItem("balance");
+        }
         this.bet = 0;
         this.gameHistoryLog = [];
         this.deck = [];
@@ -106,6 +110,7 @@ class BlackJack{
         if (this.isOver){
             if (this.didWin){
                 this.balance += this.bet * 2;
+                localStorage.setItem("balance", this.balance);
             }
             this.bet = 0;
         }
