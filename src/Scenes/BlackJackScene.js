@@ -115,8 +115,10 @@ class BlackJackScene extends Phaser.Scene {
 
 
         //buttons
+        const sceneWidth = this.physics.world.bounds.width;
+
         this.hitBtn = this.add.text(
-            (this.physics.world.bounds.width / 8) ,
+            (sceneWidth / 8),
             this.physics.world.bounds.height - 30,
             'HIT',
             {
@@ -126,6 +128,7 @@ class BlackJackScene extends Phaser.Scene {
                 align: 'center'
             }
         );
+        this.hitBtn.setOrigin(0.5, 0.5);
         this.hitBtn.setInteractive()
             .on('pointerover', () => this.hitBtn.setTint('0x0099cc'))
             .on('pointerout', () => this.hitBtn.clearTint() )
@@ -134,7 +137,7 @@ class BlackJackScene extends Phaser.Scene {
 
 
         this.standBtn = this.add.text(
-            (this.physics.world.bounds.width / 6) * 4 + 20,
+            sceneWidth * (7 / 8),
             this.physics.world.bounds.height - 30,
             'STAND',
             {
@@ -144,11 +147,30 @@ class BlackJackScene extends Phaser.Scene {
                 align: 'center'
             }
         );
+        this.standBtn.setOrigin(0.5, 0.5);
         this.standBtn.setInteractive()
             .on('pointerover', () => this.standBtn.setTint('0x0099cc'))
             .on('pointerout', () => this.standBtn.clearTint() )
             .on('pointerdown', () => this.standBtnPressed() )  //on button press
             .on('pointerup', () => this.standBtn.setTint('0x0099cc') );
+
+        this.resetBtn = this.add.text(
+            this.physics.world.bounds.width / 2,
+            this.physics.world.bounds.height - 30,
+            "RESET",
+            {
+                fontFamily: 'Monaco, Courier, monospace',
+                fontSize: '30px',
+                fill: '#fff',
+                align: 'center'
+            }
+        );
+        this.resetBtn.setOrigin(0.5, 0.5);
+        this.resetBtn.setInteractive()
+            .on('pointerover', () => this.resetBtn.setTint('0x0099cc'))
+            .on('pointerout', () => this.resetBtn.clearTint() )
+            .on('pointerdown', () => this.resetBtnPressed() )  //on button press
+            .on('pointerup', () => this.resetBtn.setTint('0x0099cc') );
     
         // Start a new game
         this.blackJackGame.resetGame();
@@ -187,6 +209,11 @@ class BlackJackScene extends Phaser.Scene {
         if (player.score >= 21)
             this.standBtnPressed();
         
+    }
+
+    resetBtnPressed() {
+        this.resetBtn.setTint('0x006800');
+        this.blackJackGame.resetGame();
     }
 
     betSetBtnPressed() {
