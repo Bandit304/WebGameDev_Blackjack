@@ -152,7 +152,6 @@ class BlackJackScene extends Phaser.Scene {
     
         // Start a new game
         this.blackJackGame.resetGame();
-        this.update();
     }
     
     update(){
@@ -177,8 +176,6 @@ class BlackJackScene extends Phaser.Scene {
         // Check results
         this.blackJackGame.checkForWin();
         this.blackJackGame.payBet();
-        
-        this.update();
     }
 
     hitBtnPressed() {
@@ -189,8 +186,6 @@ class BlackJackScene extends Phaser.Scene {
 
         if (player.score >= 21)
             this.standBtnPressed();
-          
-        this.update();
         
     }
 
