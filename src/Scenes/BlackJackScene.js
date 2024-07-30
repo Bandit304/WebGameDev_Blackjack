@@ -207,6 +207,12 @@ class BlackJackScene extends Phaser.Scene {
         // Check results
         this.blackJackGame.checkForWin();
         this.blackJackGame.payBet();
+        
+        if (this.blackJackGame.isOver && this.blackJackGame.didWin)
+            this.displayNotification("You Win!");
+        else if (this.blackJackGame.isOver && !this.blackJackGame.didWin)
+            this.displayNotification("You Lose!");
+
     }
 
     hitBtnPressed() {
@@ -259,6 +265,12 @@ class BlackJackScene extends Phaser.Scene {
         if(this.blackJackGame.bet> 0){
             this.blackJackGame.bet -= 1;
         }
-        
+    }
+
+    async displayNotification(message) {
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+            new Notification(message);
+        }
     }
 }
