@@ -193,12 +193,16 @@ class BlackJackScene extends Phaser.Scene {
         this.blackJackGame.dealerChoice();
 
         this.dealer.cards.forEach(card => {
+            // Create card sprite
             const cardSprite = new CardSprite(this, 0, 0, card.suit, card.value);
+            // Add card sprite to hand
             this.dealerHand.push(cardSprite)
+            // Calculate relative position of card sprite
             const cardWidth = 96;
             const cardHeight = 144;
             const x = ((this.dealerHand.length - 1) % 3) * (cardWidth + 10);
             const y = Math.floor((this.dealerHand.length - 1) / 3) * (cardHeight + 10);
+            // Calculate position of cardsprite relative to scene
             const sceneWidth = this.physics.world.bounds.width;
             cardSprite.x = sceneWidth - (cardWidth / 2 + 20 + x);
             cardSprite.y = 200 + y;
@@ -218,13 +222,17 @@ class BlackJackScene extends Phaser.Scene {
     hitBtnPressed() {
         // Hit
         const card = this.player.hit();
-        // Display drawn card
+        // === Display drawn card ===
+        // Create card sprite
         const cardSprite = new CardSprite(this, 0, 0, card.suit, card.value);
+        // Add card sprite to hand
         this.playerHand.push(cardSprite)
+        // Calculate relative position of card sprite
         const cardWidth = 96;
         const cardHeight = 144;
         const x = ((this.playerHand.length - 1) % 3) * (cardWidth + 10);
         const y = Math.floor((this.playerHand.length - 1) / 3) * (cardHeight + 10);
+        // Calculate position of cardsprite relative to scene
         cardSprite.x = cardWidth / 2 + 20 + x;
         cardSprite.y = 200 + y;
         // If player score can't get higher, stand
@@ -234,15 +242,20 @@ class BlackJackScene extends Phaser.Scene {
     }
 
     resetBtnPressed() {
+        // Reset game logic
         this.blackJackGame.resetGame();
+
+        // Get hand lengths
         const playerHandLength = this.playerHand.length;
         const dealerHandLength = this.dealerHand.length;
 
+        // Reset UI for player hand
         for (let i = 0; i < playerHandLength; i++) {
             const card = this.playerHand.pop();
             card.destroy()
         }
 
+        // Reset UI for dealer hand
         for (let i = 0; i < dealerHandLength; i++) {
             const card = this.dealerHand.pop();
             card.destroy()
