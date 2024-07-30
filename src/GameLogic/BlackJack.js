@@ -153,7 +153,7 @@ class BlackJack{
         const dealerTotal = this.getTotal(false, this.players.cpu.cards);
         for (let i = dealerTotal; i <= 17; i++) {     
             this.players.cpu.hit();
-            const dealerTotal = this.getTotal(false, this.players.cpu.cards);
+            i = this.getTotal(false, this.players.cpu.cards);
         }
         this.players.cpu.stay();
     }
