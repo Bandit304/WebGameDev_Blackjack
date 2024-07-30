@@ -21,6 +21,8 @@ class BlackJackScene extends Phaser.Scene {
 
     create() {
         this.blackJackGame = new BlackJack('Player');
+        this.player = this.blackJackGame.players.user;
+        this.dealer = this.blackJackGame.players.cpu;
 
         this.deck = this.physics.add.image(
             this.physics.world.bounds.width / 2, // x position
@@ -115,8 +117,10 @@ class BlackJackScene extends Phaser.Scene {
 
 
         //buttons
+        const sceneWidth = this.physics.world.bounds.width;
+
         this.hitBtn = this.add.text(
-            (this.physics.world.bounds.width / 8) ,
+            (sceneWidth / 8),
             this.physics.world.bounds.height - 30,
             'HIT',
             {
@@ -126,15 +130,19 @@ class BlackJackScene extends Phaser.Scene {
                 align: 'center'
             }
         );
+        this.hitBtn.setOrigin(0.5, 0.5);
         this.hitBtn.setInteractive()
             .on('pointerover', () => this.hitBtn.setTint('0x0099cc'))
             .on('pointerout', () => this.hitBtn.clearTint() )
-            .on('pointerdown', () => this.hitBtnPressed() )  //on button press
+            .on('pointerdown', () => {  //on button press
+                this.hitBtn.setTint('0x006800');
+                this.hitBtnPressed();
+            })
             .on('pointerup', () => this.hitBtn.setTint('0x0099cc') ); 
 
 
         this.standBtn = this.add.text(
-            (this.physics.world.bounds.width / 6) * 4 + 20,
+            sceneWidth * (7 / 8),
             this.physics.world.bounds.height - 30,
             'STAND',
             {
@@ -144,21 +152,45 @@ class BlackJackScene extends Phaser.Scene {
                 align: 'center'
             }
         );
+        this.standBtn.setOrigin(0.5, 0.5);
         this.standBtn.setInteractive()
             .on('pointerover', () => this.standBtn.setTint('0x0099cc'))
             .on('pointerout', () => this.standBtn.clearTint() )
-            .on('pointerdown', () => this.standBtnPressed() )  //on button press
+            .on('pointerdown', () => {  //on button press
+                this.standBtn.setTint('0x006800');
+                this.standBtnPressed();
+            })
             .on('pointerup', () => this.standBtn.setTint('0x0099cc') );
+
+        this.resetBtn = this.add.text(
+            this.physics.world.bounds.width / 2,
+            this.physics.world.bounds.height - 30,
+            "RESET",
+            {
+                fontFamily: 'Monaco, Courier, monospace',
+                fontSize: '30px',
+                fill: '#fff',
+                align: 'center'
+            }
+        );
+        this.resetBtn.setOrigin(0.5, 0.5);
+        this.resetBtn.setInteractive()
+            .on('pointerover', () => this.resetBtn.setTint('0x0099cc'))
+            .on('pointerout', () => this.resetBtn.clearTint() )
+            .on('pointerdown', () => {  //on button press
+                this.resetBtn.setTint('0x006800');
+                this.resetBtnPressed();
+            })
+            .on('pointerup', () => this.resetBtn.setTint('0x0099cc') );
     
         // Start a new game
         this.blackJackGame.resetGame();
-        this.update();
     }
     
     update(){
         //update text
-        this.playerText.setText(`player: ${this.blackJackGame.players.user.score}`);
-        this.dealerText.setText(`dealer: ${this.blackJackGame.players.cpu.score}`);
+        this.playerText.setText(`player: ${this.player.score}`);
+        this.dealerText.setText(`dealer: ${this.dealer.score}`);
         this.balanceBetText.setText(`balance: ${this.blackJackGame.balance}\nbet: ${this.blackJackGame.bet}`);
         
     }
@@ -166,32 +198,25 @@ class BlackJackScene extends Phaser.Scene {
     // ===== Methods =====
 
     standBtnPressed() {
-        this.standBtn.setTint('0x006800');
-        //this.player = new Player;
-
-        const Player = this.blackJackGame.players.user;
-        Player.stay();
+        this.player.stay();
         
         this.blackJackGame.dealerChoice();
         
         // Check results
         this.blackJackGame.checkForWin();
         this.blackJackGame.payBet();
-        
-        this.update();
     }
 
     hitBtnPressed() {
-        this.hitBtn.setTint('0x006800');
+        this.player.hit();
 
-        const player = this.blackJackGame.players.user;
-        player.hit();
-
-        if (player.score >= 21)
+        if (this.player.score >= 21)
             this.standBtnPressed();
-          
-        this.update();
         
+    }
+
+    resetBtnPressed() {
+        this.blackJackGame.resetGame();
     }
 
     betSetBtnPressed() {
