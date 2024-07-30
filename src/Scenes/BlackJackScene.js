@@ -270,10 +270,10 @@ class BlackJackScene extends Phaser.Scene {
             cardSprite.destroy()
         }
 
-        // === Display player hand ===
-        for (let i = 0; i < this.player.cards.length; i++) {
+        // === Display dealer hand ===
+        for (let i = 0; i < this.dealer.cards.length; i++) {
             // Get card
-            const card = this.player.cards[i];
+            const card = this.dealer.cards[i];
             // Create card sprite
             const cardSprite = new CardSprite(this, 0, 0, card.suit, card.value);
             if (i === 0 && !this.isDealerTurn)
