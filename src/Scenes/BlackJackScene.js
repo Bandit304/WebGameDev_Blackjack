@@ -182,17 +182,10 @@ class BlackJackScene extends Phaser.Scene {
     }
 
     hitBtnPressed() {
-        
-        // if(!Player.isBusted || !Player.isStanding){
         this.hitBtn.setTint('0x006800');
 
         const player = this.blackJackGame.players.user;
         player.hit();
-
-        // }
-          // Check results
-        //   this.blackJackGame.checkForWin();
-        //   this.blackJackGame.payBet();
 
         if (player.score >= 21)
             this.standBtnPressed();
