@@ -223,7 +223,8 @@ class BlackJackScene extends Phaser.Scene {
     async displayNotification(message) {
         const permission = await Notification.requestPermission();
         if (permission === "granted") {
-            new Notification(message);
+            const notification = new Notification(message);
+            setTimeout(() => notification.close(), 10000);
         }
     }
 }
