@@ -127,10 +127,33 @@ class BlackJackScene extends Phaser.Scene {
         this.blackJackGame.checkForWin();
         this.blackJackGame.payBet();
         
-        if (this.blackJackGame.isOver && this.blackJackGame.didWin)
-            this.displayNotification("You Win!");
-        else if (this.blackJackGame.isOver && !this.blackJackGame.didWin)
-            this.displayNotification("You Lose!");
+        // Display notification for player win
+        if (this.blackJackGame.isOver && this.blackJackGame.didWin) {
+            // Notification body explains game result
+            let body = "";
+            // Player wins because dealer busted
+            if (this.dealer.isBusted)
+                body = "The dealer has busted!";
+            // Player wins because of higher score
+            else
+                body = "Player has a higher score than the dealer!";
+            this.displayNotification("You Win!", body);
+        }
+        // Display notification for dealer win
+        else if (this.blackJackGame.isOver && !this.blackJackGame.didWin) {
+            // Notification body explains game result
+            let body = "";
+            // Dealer wins because player busted
+            if (this.player.isBusted)
+                body = "Player has busted!";
+            // Dealer wins because of tie
+            else if (this.player.score === this.dealer.score)
+                body = "The scores are tied, so the dealer wins!";
+            // Dealer wins because of higher score
+            else
+                body = "Player has a lower score than the dealer!";
+            this.displayNotification("You Lose!", body);
+        }
 
         // Hide hit/stand buttons
         this.hitBtn.visible = false;
@@ -220,10 +243,14 @@ class BlackJackScene extends Phaser.Scene {
         }
     }
 
-    async displayNotification(message) {
+    async displayNotification(message, body) {
+        // Get permission from client to post notifications
         const permission = await Notification.requestPermission();
+        // If permission granted, display notification
         if (permission === "granted") {
-            const notification = new Notification(message);
+            // Display notification
+            const notification = new Notification(message, { body });
+            // After 10 seconds, close notification
             setTimeout(() => notification.close(), 10000);
         }
     }
