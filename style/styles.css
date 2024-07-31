@@ -1,0 +1,15 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #133926;
+}
+
+#game {
+    width: 100%;
+    max-width: 800px;
+}
+
+#game canvas {
+    width: 100%;
+}
